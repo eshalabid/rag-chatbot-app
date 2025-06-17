@@ -1,0 +1,25 @@
+version: '3.11.8'
+
+services:
+  postgres:
+    container_name: basf_db_container
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: basf_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+#      - ./app/initdb:/docker-entrypoint-initdb.d # Mounts init scripts to automatically set up pgvector
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'basf-chemetall-mailhog'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  postgres_data:
