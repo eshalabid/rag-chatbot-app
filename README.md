@@ -1,67 +1,79 @@
 # 🤖 RAG Chatbot Application
 
-This is a lightweight RAG (Retrieval-Augmented Generation) chatbot application that combines semantic search with LLM-based answer generation using:
+This is a lightweight Retrieval-Augmented Generation (RAG) chatbot application that combines **semantic search** with **LLM-based answer generation**, using:
 
-- **FastAPI** for backend APIs  
-- **pgvector** with PostgreSQL to store dense vector embeddings  
-- **MiniLM (all-MiniLM-L6-v2)** for embedding generation  
-- **TinyLlama** and **Azure GPT-4o-mini** for natural language responses  
-- **Streamlit** for an interactive frontend  
-- Modular **LangChain-style tools** for greetings, math, and web lookup  
+- ⚡ **FastAPI** for backend APIs  
+- 📦 **pgvector** with PostgreSQL to store dense vector embeddings  
+- 🧠 **MiniLM (all-MiniLM-L6-v2)** for embedding generation  
+- 💬 **TinyLlama** or **Azure GPT-4o-mini** for response generation  
+- 🌐 **Streamlit** for a simple and interactive frontend  
+- 🧩 Modular **LangChain-style tools** for greetings, math, and web lookup  
 
 ---
 
 ## 🚀 Features
 
-- 🔎 **Semantic Search** using pgvector and MiniLM sentence embeddings  
-- 🧠 **RAG Pipeline**: retrieves top relevant text chunks and sends them to an LLM  
-- ⚙️ **Modular Tools**: includes greeting, BODMAS math solver, and web search tool  
-- 🌐 **Streamlit UI** for easy querying  
-- 🔗 **FastAPI Backend** for API endpoints  
-- 🧩 Uses **LangChain Agent** for combining tools and generating dynamic answers  
-- 🔐 Fully runs locally (except optional Azure GPT)  
+- 🔎 **Semantic Search** using pgvector + MiniLM embeddings  
+- 🧠 **RAG Pipeline** retrieves relevant content and sends it to an LLM  
+- 🧮 **Built-in Tools** for greeting, math (BODMAS), and simple web search  
+- 🌐 **Streamlit UI** for real-time querying  
+- 🔗 **FastAPI Backend** with clean routing  
+- 🧠 **LangChain Agent** integrates tools and context-aware LLM responses  
+- 🔐 Fully local setup (with optional Azure OpenAI support)  
 
 ---
 
 ## 🗂️ Project Structure
 
-main.py → Launches FastAPI app
-table.py → Inserts CSV data and vector embeddings into PostgreSQL
-similarity_search.py → Embeds user query and retrieves similar content
-rag_tool_agent.py → Combines RAG retrieval and passes to LLM for response
-stream.py → Streamlit frontend
-view.py → API routing logic
-tool.py → Tool & agent setup with LangChain
-greeting_tool_fn.py → Simple greeting tool
-bodmas_tool.py → Math expression solver using BODMAS
-web_search_tool.py → Simple website link search tool
+.
+├── backend/
+│ ├── main.py # FastAPI app entry point
+│ ├── view.py # API route definitions
+│ ├── stream.py # Streamlit frontend
+│
+├── tools/
+│ ├── greeting_tool.py # Simple greeting handler
+│ ├── bodmas_tool.py # Math solver (BODMAS)
+│ └── web_search_tool.py # Web link tool (GitHub, YouTube, etc.)
+│
+├── agent.py # LangChain agent setup
+├── llm_provider.py # Azure OpenAI or TinyLlama model setup
+├── table.py # Ingests CSV and stores vector embeddings
+├── similarity_search.py # Performs pgvector-based search
+├── README.md # You're reading this :)
+├── LICENSE # Project license
+├── .env # 🔐 API keys and secrets (not tracked)
+└── .gitignore # Ignores .env, pycache, etc.
+
+
 
 ---
 
 ## ⚙️ How to Run
 
-### 🔧 1. Install Requirements
-```bash
+1️⃣ Install Requirements: 
 pip install -r requirements.txt
-🗄️ 2. Start PostgreSQL with pgvector extension
-Make sure your DB has pgvector installed and running.
 
-🧠 3. Populate the vector DB
-Edit the CSV path in table.py and run:
-python table.py 
+2️⃣ Start PostgreSQL with pgvector extension
+Make sure your PostgreSQL DB has the vector extension installed:
+CREATE EXTENSION IF NOT EXISTS vector;
 
-🚀 4. Run FastAPI backend
-uvicorn main:app --reload
+3️⃣ Populate the Vector Database
+Update the CSV path in table.py, then run:
+python table.py
 
-🌐 5. Run Streamlit frontend
-streamlit run stream.py
+4️⃣ Run the FastAPI Backend
+uvicorn backend.main:app --reload
+
+5️⃣ Launch the Streamlit Frontend
+streamlit run backend/stream.py
 
 📦 Requirements
 Python 3.10+
 
-FastAPI
+fastapi
 
-Streamlit
+streamlit
 
 psycopg2
 
@@ -75,14 +87,17 @@ langchain
 
 requests
 
-openai / Azure SDK (optional for GPT-4o-mini)
+openai (or Azure SDK for GPT-4o-mini)
 
 📌 Notes
-Embeddings are generated using sentence-transformers/all-MiniLM-L6-v2
+Embeddings use: sentence-transformers/all-MiniLM-L6-v2
 
-Azure OpenAI (GPT-4o-mini) is used in agent setup, but can be swapped for TinyLlama
+LLM via: Azure GPT-4o-mini (replaceable with local TinyLlama or any other)
 
-Proxy is used for some environments — remove if not needed
+Proxy variables were removed for clean, universal use
 
-Can be extended with more tools or document types
+Easily extensible with more tools or file types
 
+🔐 Environment Setup
+Create a .env file in the project root with your keys:
+AZURE_API_KEY=your_azure_openai_key
