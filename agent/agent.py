@@ -1,6 +1,6 @@
 from langchain.agents import initialize_agent, AgentType
 from tools.tool import tools
-from llm_provider import llm
+from llm.llm_provider import llm
 
 agent = initialize_agent(
     tools=tools,
