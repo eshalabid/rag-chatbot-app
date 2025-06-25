@@ -1,6 +1,9 @@
 from langchain.agents import initialize_agent, AgentType
 from langchain_openai import AzureChatOpenAI
 from similarity_search import similarity_search
+from greeting_tool_fn import greeting_tool
+from web_search_tool import web_tool
+from bodmas_tool import bodmas_tool
 from langchain.tools import Tool
 import os
 
@@ -31,7 +34,7 @@ llm = AzureChatOpenAI(
     model_name=COMPLETION_LLM_COMPLETION_MODEL_NAME,
 )
 
-tools = [rag_tool]
+tools = [rag_tool,greeting_tool,bodmas_tool,web_tool]
 agent = initialize_agent(
     tools=tools,
     llm=llm,
@@ -40,6 +43,6 @@ agent = initialize_agent(
 )
 
 if __name__ == "__main__":
-    query = "How do I set up my company email on my mobile device?"
+    query = "linux file permissions?"
     response = agent.invoke({"input": query})
     print("\n🤖 Agent's Answer:\n", response.get("output"))

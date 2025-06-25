@@ -44,6 +44,32 @@ def similarity_search(query):
 
     return retrieved_chunks
 
+def greeting_tool_fn(_:str) -> str:
+    return "Helloo! Im your assistant. How can i help you today :)?"
+
+
+def web_search_tool(query:str) -> str:
+    eb_links = {
+        "linkedin": "https://www.linkedin.com",
+        "github": "https://www.github.com",
+        "stackoverflow": "https://stackoverflow.com",
+        "openai": "https://www.openai.com",
+        "youtube": "https://www.youtube.com",
+    }
+    query_lower = query.lower()
+    for name, link in eb_links.items():
+        if name in query_lower:
+            return f"Here’s the link to {name.title()}: {link}"
+    return "Sorry, I couldn’t find a matching website in my list."
+
+
+def bodmas_tool_fn(expression: str) -> str:
+    try:
+        result = eval(expression, {"__builtins__": {}}, {})
+        return f"The result of '{expression}' is {result}"
+    except Exception as e:
+        return f"Error evaluating expression: {str(e)}"
+
 if __name__ == "__main__":
     query ="How do I set up my company email on my mobile device"
     top_docs = similarity_search(query)
